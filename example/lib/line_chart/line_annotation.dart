@@ -13,26 +13,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Line chart with range annotations example.
+/// Line chart with line annotations example.
 // EXCLUDE_FROM_GALLERY_DOCS_START
 import 'dart:math';
 // EXCLUDE_FROM_GALLERY_DOCS_END
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
-class LineRangeAnnotationChart extends StatelessWidget {
+class LineLineAnnotationChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool animate;
 
-  LineRangeAnnotationChart(this.seriesList, {this.animate});
+  LineLineAnnotationChart(this.seriesList, {this.animate});
 
-  /// Creates a [LineChart] with sample data and range annotations.
+  /// Creates a [LineChart] with sample data and line annotations.
   ///
   /// The second annotation extends beyond the range of the series data,
   /// demonstrating the effect of the [Charts.RangeAnnotation.extendAxis] flag.
   /// This can be set to false to disable range extension.
-  factory LineRangeAnnotationChart.withSampleData() {
-    return new LineRangeAnnotationChart(
+  factory LineLineAnnotationChart.withSampleData() {
+    return new LineLineAnnotationChart(
       _createSampleData(),
       // Disable animations for image tests.
       animate: false,
@@ -43,8 +43,8 @@ class LineRangeAnnotationChart extends StatelessWidget {
   // This section is excluded from being copied to the gallery.
   // It is used for creating random series data to demonstrate animation in
   // the example app only.
-  factory LineRangeAnnotationChart.withRandomData() {
-    return new LineRangeAnnotationChart(_createRandomData());
+  factory LineLineAnnotationChart.withRandomData() {
+    return new LineLineAnnotationChart(_createRandomData());
   }
 
   /// Create random data.
@@ -75,19 +75,19 @@ class LineRangeAnnotationChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return new charts.LineChart(seriesList, animate: animate, behaviors: [
       new charts.RangeAnnotation([
-        new charts.RangeAnnotationSegment(
-            0.5, 1.0, charts.RangeAnnotationAxisType.domain,
+        new charts.LineAnnotationSegment(
+            1.0, charts.RangeAnnotationAxisType.domain,
             startLabel: 'Domain 1'),
-        new charts.RangeAnnotationSegment(
-            2, 4, charts.RangeAnnotationAxisType.domain,
+        new charts.LineAnnotationSegment(
+            4, charts.RangeAnnotationAxisType.domain,
             endLabel: 'Domain 2', color: charts.MaterialPalette.gray.shade200),
-        new charts.RangeAnnotationSegment(
-            15, 20, charts.RangeAnnotationAxisType.measure,
+        new charts.LineAnnotationSegment(
+            20, charts.RangeAnnotationAxisType.measure,
             startLabel: 'Measure 1 Start',
             endLabel: 'Measure 1 End',
             color: charts.MaterialPalette.gray.shade300),
-        new charts.RangeAnnotationSegment(
-            35, 65, charts.RangeAnnotationAxisType.measure,
+        new charts.LineAnnotationSegment(
+            65, charts.RangeAnnotationAxisType.measure,
             startLabel: 'Measure 2 Start',
             endLabel: 'Measure 2 End',
             color: charts.MaterialPalette.gray.shade400),

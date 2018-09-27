@@ -12,27 +12,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-/// Line chart with range annotations example.
 // EXCLUDE_FROM_GALLERY_DOCS_START
 import 'dart:math';
 // EXCLUDE_FROM_GALLERY_DOCS_END
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
-class LineRangeAnnotationChart extends StatelessWidget {
+/// This is a line chart with a title text in every margin.
+///
+/// A series of [ChartTitle] behaviors are used to render titles, one per
+/// margin.
+class ChartTitleLine extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool animate;
 
-  LineRangeAnnotationChart(this.seriesList, {this.animate});
+  ChartTitleLine(this.seriesList, {this.animate});
 
-  /// Creates a [LineChart] with sample data and range annotations.
-  ///
-  /// The second annotation extends beyond the range of the series data,
-  /// demonstrating the effect of the [Charts.RangeAnnotation.extendAxis] flag.
-  /// This can be set to false to disable range extension.
-  factory LineRangeAnnotationChart.withSampleData() {
-    return new LineRangeAnnotationChart(
+  /// Creates a [LineChart] with sample data and no transition.
+  factory ChartTitleLine.withSampleData() {
+    return new ChartTitleLine(
       _createSampleData(),
       // Disable animations for image tests.
       animate: false,
@@ -43,8 +41,8 @@ class LineRangeAnnotationChart extends StatelessWidget {
   // This section is excluded from being copied to the gallery.
   // It is used for creating random series data to demonstrate animation in
   // the example app only.
-  factory LineRangeAnnotationChart.withRandomData() {
-    return new LineRangeAnnotationChart(_createRandomData());
+  factory ChartTitleLine.withRandomData() {
+    return new ChartTitleLine(_createRandomData());
   }
 
   /// Create random data.
@@ -55,9 +53,7 @@ class LineRangeAnnotationChart extends StatelessWidget {
       new LinearSales(0, random.nextInt(100)),
       new LinearSales(1, random.nextInt(100)),
       new LinearSales(2, random.nextInt(100)),
-      // Fix one of the points to 100 so that the annotations are consistently
-      // placed.
-      new LinearSales(3, 100),
+      new LinearSales(3, random.nextInt(100)),
     ];
 
     return [
@@ -73,26 +69,37 @@ class LineRangeAnnotationChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new charts.LineChart(seriesList, animate: animate, behaviors: [
-      new charts.RangeAnnotation([
-        new charts.RangeAnnotationSegment(
-            0.5, 1.0, charts.RangeAnnotationAxisType.domain,
-            startLabel: 'Domain 1'),
-        new charts.RangeAnnotationSegment(
-            2, 4, charts.RangeAnnotationAxisType.domain,
-            endLabel: 'Domain 2', color: charts.MaterialPalette.gray.shade200),
-        new charts.RangeAnnotationSegment(
-            15, 20, charts.RangeAnnotationAxisType.measure,
-            startLabel: 'Measure 1 Start',
-            endLabel: 'Measure 1 End',
-            color: charts.MaterialPalette.gray.shade300),
-        new charts.RangeAnnotationSegment(
-            35, 65, charts.RangeAnnotationAxisType.measure,
-            startLabel: 'Measure 2 Start',
-            endLabel: 'Measure 2 End',
-            color: charts.MaterialPalette.gray.shade400),
-      ]),
-    ]);
+    return new charts.LineChart(
+      seriesList,
+      animate: animate,
+      // Configures four [ChartTitle] behaviors to render titles in each chart
+      // margin. The top title has a sub-title, and is aligned to the left edge
+      // of the chart. The other titles are aligned with the middle of the draw
+      // area.
+      behaviors: [
+        new charts.ChartTitle('Top title text',
+            subTitle: 'Top sub-title text',
+            behaviorPosition: charts.BehaviorPosition.top,
+            titleOutsideJustification: charts.OutsideJustification.start,
+            // Set a larger inner padding than the default (10) to avoid
+            // rendering the text too close to the top measure axis tick label.
+            // The top tick label may extend upwards into the top margin region
+            // if it is located at the top of the draw area.
+            innerPadding: 18),
+        new charts.ChartTitle('Bottom title text',
+            behaviorPosition: charts.BehaviorPosition.bottom,
+            titleOutsideJustification:
+                charts.OutsideJustification.middleDrawArea),
+        new charts.ChartTitle('Start title',
+            behaviorPosition: charts.BehaviorPosition.start,
+            titleOutsideJustification:
+                charts.OutsideJustification.middleDrawArea),
+        new charts.ChartTitle('End title',
+            behaviorPosition: charts.BehaviorPosition.end,
+            titleOutsideJustification:
+                charts.OutsideJustification.middleDrawArea),
+      ],
+    );
   }
 
   /// Create one series with sample hard coded data.
